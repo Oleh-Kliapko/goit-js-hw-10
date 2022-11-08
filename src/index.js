@@ -83,11 +83,14 @@ function onRenderCountriesList(countries) {
   }
 
   if (numberCountriesFound > 10) {
-    Notify.warning(
-      'Too many matches found. Please enter a more specific name',
-      {
-        timeout: TIMEOUT_NOTIFICATION,
-      }
+    debounce(
+      Notify.warning(
+        'Too many matches found. Please enter a more specific name',
+        {
+          timeout: TIMEOUT_NOTIFICATION,
+        }
+      ),
+      DEBOUNCE_DELAY
     );
   }
 
