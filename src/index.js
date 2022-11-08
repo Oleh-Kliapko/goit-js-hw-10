@@ -3,8 +3,6 @@ import { fetchCountries } from '../src/fetchCountries';
 import debounce from 'lodash.debounce';
 import { Notify } from 'notiflix';
 
-// Notify.failure('Oops, there is no country with that name')
-
 const DEBOUNCE_DELAY = 300;
 const TIMEOUT_NOTIFICATION = 4000;
 
@@ -19,18 +17,24 @@ refs.inputEl.addEventListener(
   debounce(onSearchCountry, DEBOUNCE_DELAY)
 );
 
+Notify.info('Search the country by Name', {
+  clickToClose: true,
+  position: 'left-top',
+  fontSize: 20,
+  timeout: 2000,
+});
+
 /**function */
+
+// Too many matches found. Please enter a more specific name
 
 function onSearchCountry(evt) {
   evt.preventDefault();
 
   if (evt.target.value.length === 1) {
-    Notify.warning(
-      'Too many matches found. Please enter a more specific name',
-      {
-        timeout: TIMEOUT_NOTIFICATION,
-      }
-    );
+    Notify.warning('At least 2 letters must be entered to search', {
+      timeout: TIMEOUT_NOTIFICATION,
+    });
     return;
   } else if (evt.target.value.length === 0) {
     Notify.info('Please start entering some country for searching', {
@@ -44,9 +48,12 @@ function onSearchCountry(evt) {
 
   fetchCountries(evt.target.value)
     .then(onRenderCountriesList)
-    .catch(Notify.failure('Oops, there is no country with that name'), {
-      timeout: TIMEOUT_NOTIFICATION,
-    });
+    .catch(
+      error => Notify.failure('Oops, there is no country with that name'),
+      {
+        timeout: TIMEOUT_NOTIFICATION,
+      }
+    );
 }
 
 function onRenderCountriesList(countries) {
@@ -74,5 +81,15 @@ function onRenderCountriesList(countries) {
     refs.infoAboutCountryEl.innerHTML = markupInfoAboutCountry;
     return;
   }
+
+  if (numberCountriesFound > 10) {
+    Notify.warning(
+      'Too many matches found. Please enter a more specific name',
+      {
+        timeout: TIMEOUT_NOTIFICATION,
+      }
+    );
+  }
+
   refs.infoAboutCountryEl.innerHTML = '';
 }
