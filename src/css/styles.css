@@ -54,5 +54,16 @@ p {
   margin-top: 10px;
   margin-bottom: 0px;
   margin-left: 20px;
-  font-size: 20px;
+  font-size: 30px;
+}
+
+.big img {
+  display: block;
+  width: 150px;
+  height: auto;
+  border: 0.5px solid grey;
+}
+
+.big h1 {
+  font-size: 48px;
 }

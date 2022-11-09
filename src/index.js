@@ -17,26 +17,25 @@ refs.inputEl.addEventListener(
   debounce(onSearchCountry, DEBOUNCE_DELAY)
 );
 
-Notify.info('Search the country by Name', {
+Notify.info('You can find the country by Name', {
   clickToClose: true,
   position: 'left-top',
-  fontSize: 20,
+  fontSize: '18px',
   timeout: 2000,
 });
 
 /**function */
 
-// Too many matches found. Please enter a more specific name
-
 function onSearchCountry(evt) {
   evt.preventDefault();
+  const valueInput = evt.target.value.trim();
 
-  if (evt.target.value.length === 1) {
+  if (valueInput.length === 1) {
     Notify.warning('At least 2 letters must be entered to search', {
       timeout: TIMEOUT_NOTIFICATION,
     });
     return;
-  } else if (evt.target.value.length === 0) {
+  } else if (valueInput.length === 0) {
     Notify.info('Please start entering some country for searching', {
       timeout: TIMEOUT_NOTIFICATION,
     });
@@ -46,14 +45,13 @@ function onSearchCountry(evt) {
     return;
   }
 
-  fetchCountries(evt.target.value)
+  fetchCountries(valueInput)
     .then(onRenderCountriesList)
-    .catch(
-      error => Notify.failure('Oops, there is no country with that name'),
-      {
+    .catch(error => {
+      Notify.failure('Oops, there is no country with that name', {
         timeout: TIMEOUT_NOTIFICATION,
-      }
-    );
+      });
+    });
 }
 
 function onRenderCountriesList(countries) {
@@ -70,6 +68,9 @@ function onRenderCountriesList(countries) {
   refs.countriesListEl.innerHTML = markupCountriesList;
 
   if (numberCountriesFound === 1) {
+    const bigRenderCountry = document.querySelector('.country');
+    bigRenderCountry.classList.add('big');
+
     const markupInfoAboutCountry = countries
       .map(
         country =>
@@ -83,14 +84,11 @@ function onRenderCountriesList(countries) {
   }
 
   if (numberCountriesFound > 10) {
-    debounce(
-      Notify.warning(
-        'Too many matches found. Please enter a more specific name',
-        {
-          timeout: TIMEOUT_NOTIFICATION,
-        }
-      ),
-      DEBOUNCE_DELAY
+    Notify.warning(
+      'Too many matches found. Please enter a more specific name',
+      {
+        timeout: TIMEOUT_NOTIFICATION,
+      }
     );
   }
 
