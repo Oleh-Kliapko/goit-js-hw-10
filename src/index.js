@@ -13,21 +13,13 @@ const refs = {
 };
 
 refs.inputEl.addEventListener(
-  'keydown',
+  'input',
   debounce(onSearchCountry, DEBOUNCE_DELAY)
 );
-
-Notify.info('You can find the country by Name', {
-  clickToClose: true,
-  position: 'left-top',
-  fontSize: '18px',
-  timeout: 2000,
-});
 
 /**function */
 
 function onSearchCountry(evt) {
-  evt.preventDefault();
   const valueInput = evt.target.value.trim();
 
   if (valueInput.length === 1) {
@@ -41,7 +33,7 @@ function onSearchCountry(evt) {
     });
     refs.countriesListEl.innerHTML = '';
     refs.infoAboutCountryEl.innerHTML = '';
-    refs.inputEl.removeEventListener('keydown', evt);
+    refs.inputEl.removeEventListener('input', evt);
     return;
   }
 
@@ -51,6 +43,8 @@ function onSearchCountry(evt) {
       Notify.failure('Oops, there is no country with that name', {
         timeout: TIMEOUT_NOTIFICATION,
       });
+      refs.countriesListEl.innerHTML = '';
+      refs.infoAboutCountryEl.innerHTML = '';
     });
 }
 
