@@ -53,10 +53,10 @@ function onRenderCountriesList(countries) {
 
   const markupCountriesList = countries
     .map(
-      country =>
-        `<li class="country"><img src="${country.flags.svg}"
-      alt="Flag of ${country.name.official}" />
-      <h1>${country.name.official}</h1></li>`
+      ({name:{official}, flags:{svg}}) =>
+        `<li class="country"><img src="${svg}"
+      alt="Flag of ${official}" />
+      <h1>${official}</h1></li>`
     )
     .join('');
   refs.countriesListEl.innerHTML = markupCountriesList;
@@ -67,10 +67,10 @@ function onRenderCountriesList(countries) {
 
     const markupInfoAboutCountry = countries
       .map(
-        country =>
-          `<p><b>Capital: </b>${country.capital}</p>
-         <p><b>Population: </b>${country.population}</p>
-         <p><b>Languages: </b>${Object.values(country.languages)}</p>`
+        ({capital,population, languages}) =>
+          `<p><b>Capital: </b>${capital}</p>
+         <p><b>Population: </b>${population}</p>
+         <p><b>Languages: </b>${Object.values(languages)}</p>`
       )
       .join('');
     refs.infoAboutCountryEl.innerHTML = markupInfoAboutCountry;
